@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LoginApp | Search</title>
+    <link rel="stylesheet" href="css/welcome.css">
+    <script src="js/angular.min.js"></script>
+    <script>
+        const app = angular.module('search',[]);
+
+        app.controller('controller',($scope,$http)=>{
+            var array=[];
+            $scope.visible = false;
+            $scope.pushdata = function(){
+                var search={"name":$scope.search};
+                array.push(search);
+                console.log("array",array);
+                if(array.length>5){
+                    for(let i=0;i<array.length;i++){
+                       var j= i+1;
+                       array[i]=array[j];
+                    }
+                    array.pop(array.length-1);
+                }
+                var url="https://api.github.com/search/repositories?q="+$scope.search+"+language";
+                $http.get(url).then(data=>{
+                    console.log("data is",data.data.items);
+                    $scope.data=data;
+                    $scope.visible=true;
+                },
+                err=>{
+                    console.log("Error is",err);
+                });
+            };
+
+            // $scope.focus=function(){
+            //     $scope.visible= true;
+            // }
+
+            $scope.getdata = function(){
+                console.log('getdata called');
+                $scope.results= array;
+            }
+        });
+    </script>
+</head>
+<body ng-app="search" ng-controller="controller" class="container-login100" style="background-image: url('images/bg-01.jpg');">
+<!-- search form 6 -->
+    <div style="width:100%">
+        <form class="form-wrapper-2 cf">
+        <input type="text" ng-model="search" ng-change="getdata()" placeholder="Search here..." required>
+        <button type="submit" ng-click="pushdata()">Search</button>
+        </form>
+
+        <div class="dropdown">
+            <table>
+                <tr ng-repeat="result in results">
+                    <td>{{result.name}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+      <div ng-show="visible" style="width:100%">
+          <h2>Showing Results..</h2>
+        <table>
+            <tr  ng-repeat="item in data.data.items">
+                <td> <h3 style="color:blue"> <a href="#">{{item.full_name}} </a></h3>
+                    <h4 style="color:lightgray">{{item.description}} </h4> 
+                    <span style="font-size:10px">{{item.created_at}}</span> </td>
+                <td> </td>
+            </tr>
+            <hr>
+        </table>
+    </div>
+   
+</body>
+</html>
