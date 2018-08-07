@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-// const db =require('./db/config');
-// const userOperations = require('./db/usercrud');
+const db =require('./db/config');
+const userOperations = require('./db/usercrud');
 app.set('view engine','ejs');
 
 // gmail login
