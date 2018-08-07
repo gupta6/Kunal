@@ -7,7 +7,8 @@ var userOperations = {
             }
             else{
                 console.log("U register successfully");
-                res.send("You have registered successfully !!");
+//                 res.send("You have registered successfully !!");
+                res.render("register");
             }
         });
     },
